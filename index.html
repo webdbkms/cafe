@@ -26,6 +26,7 @@
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=1200&h=630">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -167,6 +168,55 @@
                 <div id="recentList" class="space-y-4">
                     <!-- JS will populate this -->
                     <p class="text-gray-500 dark:text-gray-400 text-sm">최근 본 견적이 없습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waitlist -->
+    <section id="waitlist" class="py-20 bg-coffee-50 dark:bg-gray-900 transition-colors duration-200">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-coffee-900 dark:text-white mb-4 transition-colors">카페브릿지 오픈 예정, 사전예약</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-8 transition-colors">지금 사전예약하시고 오픈 시 가장 먼저 카페 브릿지의 소식과 혜택을 받아보세요!</p>
+            
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-coffee-100 dark:border-gray-700 transition-colors text-left relative overflow-hidden">
+                <div id="waitlistCounter" class="text-center mb-6 font-semibold text-coffee-600 dark:text-coffee-400">
+                    현재 <span id="waitlistCount" class="text-2xl font-bold">0</span>명이 사전예약했습니다 🎉
+                </div>
+                
+                <form id="waitlistForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">이름</label>
+                        <input type="text" id="wlName" required class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-coffee-500 transition-colors" placeholder="홍길동">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">이메일</label>
+                        <input type="email" id="wlEmail" required class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-coffee-500 transition-colors" placeholder="example@email.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">어떻게 알게 되셨나요?</label>
+                        <select id="wlSource" required class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-coffee-500 transition-colors">
+                            <option value="" disabled selected>항목을 선택해주세요</option>
+                            <option value="SNS">SNS (인스타그램, 페이스북, 쓰레드 등)</option>
+                            <option value="지인추천">주변 지인 추천</option>
+                            <option value="검색">인터넷 검색 엔진 (네이버 등)</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="wlSubmitBtn" class="w-full bg-coffee-600 hover:bg-coffee-900 dark:hover:bg-coffee-500 text-white py-4 rounded-xl font-bold text-lg transition-colors">
+                        사전예약 신청하기
+                    </button>
+                    <p id="wlError" class="text-red-500 text-sm hidden text-center mt-4"></p>
+                </form>
+
+                <!-- Success Screen -->
+                <div id="wlSuccess" class="hidden absolute inset-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-8 text-center transition-opacity">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-500 rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">사전예약 완료!</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">감사합니다. <span id="wlQueueNum" class="font-bold text-coffee-600 dark:text-coffee-400"></span>번째로 예약이 접수되었습니다.</p>
+                    <button type="button" onclick="document.getElementById('wlSuccess').classList.add('hidden'); document.getElementById('waitlistForm').reset();" class="text-coffee-600 hover:text-coffee-800 dark:text-coffee-400 dark:hover:text-coffee-200 font-medium underline">폼으로 돌아가기</button>
                 </div>
             </div>
         </div>
@@ -333,6 +383,101 @@
 
         els.btn.addEventListener('click', saveEstimate);
         renderHistory();
+
+        // ----------------------------------------------------
+        // Supabase Waitlist Logic
+        // ----------------------------------------------------
+        const supabaseUrl = 'https://epsvceowzoqcfsgfnany.supabase.co';
+        const supabaseKey = 'sb_publishable_MAHMRDNCeTGlxw4HtJzyrw_84dFdZD8';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        const wlForm = document.getElementById('waitlistForm');
+        const wlName = document.getElementById('wlName');
+        const wlEmail = document.getElementById('wlEmail');
+        const wlSource = document.getElementById('wlSource');
+        const wlSubmitBtn = document.getElementById('wlSubmitBtn');
+        const wlError = document.getElementById('wlError');
+        const wlSuccess = document.getElementById('wlSuccess');
+        const wlQueueNum = document.getElementById('wlQueueNum');
+        const waitlistCount = document.getElementById('waitlistCount');
+
+        async function fetchWaitlistCount() {
+            try {
+                const { count, error } = await supabaseClient
+                    .from('waitlist')
+                    .select('*', { count: 'exact', head: true });
+                if (!error && count !== null) {
+                    waitlistCount.innerText = count.toLocaleString();
+                }
+            } catch (err) {
+                console.error('Waitlist count fetch error:', err);
+            }
+        }
+        
+        // Initial fetch on page load
+        fetchWaitlistCount();
+
+        wlForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            wlError.classList.add('hidden');
+            wlSubmitBtn.disabled = true;
+            wlSubmitBtn.innerText = '접수 중...';
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(wlEmail.value)) {
+                wlError.innerText = '올바른 이메일 주소 형식인지 확인해주세요.';
+                wlError.classList.remove('hidden');
+                wlSubmitBtn.disabled = false;
+                wlSubmitBtn.innerText = '사전예약 신청하기';
+                return;
+            }
+
+            try {
+                // 1. Check for duplicate email (optional, since it will throw error anyway on Unique constraint, but good for custom error message)
+                const { data: existing, error: checkError } = await supabaseClient
+                    .from('waitlist')
+                    .select('id')
+                    .eq('email', wlEmail.value)
+                    .maybeSingle();
+
+                if (existing) {
+                    wlError.innerText = '이미 사전예약이 접수된 이메일입니다. 감사합니다!';
+                    wlError.classList.remove('hidden');
+                    wlSubmitBtn.disabled = false;
+                    wlSubmitBtn.innerText = '사전예약 신청하기';
+                    return;
+                }
+
+                // 2. Insert new record
+                const { error: insertError } = await supabaseClient
+                    .from('waitlist')
+                    .insert([
+                        { name: wlName.value, email: wlEmail.value, source: wlSource.value }
+                    ]);
+
+                if (insertError) {
+                    throw insertError;
+                }
+
+                // 3. Update count and show success screen
+                await fetchWaitlistCount();
+                wlQueueNum.innerText = waitlistCount.innerText;
+                wlSuccess.classList.remove('hidden');
+                lucide.createIcons(); // Re-render icons inside success screen just in case
+
+            } catch (err) {
+                console.error(err);
+                if(err?.code === '23505') { // Postgres Unique Constraint violation
+                    wlError.innerText = '이미 사전예약이 접수된 이메일입니다.';
+                } else {
+                    wlError.innerText = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+                }
+                wlError.classList.remove('hidden');
+            } finally {
+                wlSubmitBtn.disabled = false;
+                wlSubmitBtn.innerText = '사전예약 신청하기';
+            }
+        });
     </script>
 </body>
 </html>
