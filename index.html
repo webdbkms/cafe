@@ -4,10 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>카페브릿지 | 동네 카페가 당신의 회의실이 됩니다</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="더 이상 시끄러운 카페에서 눈치 보며 회의하지 마세요. 카페브릿지가 조용하고 쾌적한 비즈니스 공간을 찾아드립니다.">
+    <meta name="keywords" content="카페대관, 회의실 대여, 스터디룸, 공유오피스, 미팅룸, 카페브릿지">
+    
+    <!-- Open Graph (KakaoTalk, Facebook 등) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cafebridge.kr/">
+    <meta property="og:title" content="카페브릿지 | 동네 카페가 당신의 회의실이 됩니다">
+    <meta property="og:description" content="시끄러운 카페 대신 조용하고 쾌적한 비즈니스 공간을 찾아드립니다. 합리적인 가격으로 회의실을 예약해보세요.">
+    <meta property="og:site_name" content="카페브릿지">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=1200&h=630">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="카페브릿지 | 동네 카페가 당신의 회의실이 됩니다">
+    <meta name="twitter:description" content="시끄러운 카페 대신 조용하고 쾌적한 비즈니스 공간을 찾아드립니다. 합리적인 가격으로 회의실을 예약해보세요.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=1200&h=630">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -17,56 +38,70 @@
             }
         }
     </script>
+    <script>
+        // Init dark mode immediately to avoid flash
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
     <style> html { scroll-behavior: smooth; } </style>
 </head>
-<body class="bg-coffee-50 text-gray-800">
+<body class="bg-coffee-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-200">
 
     <!-- Header -->
-    <header class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
+    <header class="fixed w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm z-50 transition-colors duration-200 border-b border-transparent dark:border-gray-800">
         <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-xl font-bold text-coffee-900 flex items-center gap-2">
+            <div class="text-xl font-bold text-coffee-900 dark:text-coffee-100 flex items-center gap-2">
                 <i data-lucide="coffee" class="w-6 h-6"></i> 카페브릿지
             </div>
-            <a href="#calculator" class="bg-coffee-600 text-white px-5 py-2 rounded-full font-medium hover:bg-coffee-900 transition">예약하기</a>
+            <div class="flex items-center gap-4">
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200" aria-label="Toggle Dark Mode">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-yellow-400"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-gray-500"></i>
+                </button>
+                <a href="#calculator" class="bg-coffee-600 hover:bg-coffee-900 dark:hover:bg-coffee-500 text-white px-5 py-2 rounded-full font-medium transition-colors">예약하기</a>
+            </div>
         </div>
     </header>
 
     <!-- Hero -->
     <section class="pt-32 pb-20 px-6 text-center">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-coffee-900 mb-6 tracking-tight">
-            동네 카페가<br/><span class="text-coffee-600">당신의 회의실이 됩니다</span>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-coffee-900 dark:text-white mb-6 tracking-tight transition-colors">
+            동네 카페가<br/><span class="text-coffee-600 dark:text-coffee-400">당신의 회의실이 됩니다</span>
         </h1>
-        <p class="text-lg text-gray-600 mb-10 max-w-xl mx-auto">더 이상 시끄러운 카페에서 눈치 보며 회의하지 마세요. 카페브릿지가 조용하고 쾌적한 비즈니스 공간을 찾아드립니다.</p>
-        <a href="#calculator" class="inline-flex items-center gap-2 bg-coffee-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-coffee-900 shadow-lg transition">
+        <p class="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-xl mx-auto transition-colors">더 이상 시끄러운 카페에서 눈치 보며 회의하지 마세요. 카페브릿지가 조용하고 쾌적한 비즈니스 공간을 찾아드립니다.</p>
+        <a href="#calculator" class="inline-flex items-center gap-2 bg-coffee-600 hover:bg-coffee-900 dark:hover:bg-coffee-500 text-white px-8 py-4 rounded-full text-lg font-bold shadow-lg transition-all">
             가격 알아보기 <i data-lucide="arrow-right" class="w-5 h-5"></i>
         </a>
     </section>
 
     <!-- Features -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-white dark:bg-gray-800 transition-colors duration-200">
         <div class="max-w-5xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-coffee-900 mb-12">왜 카페브릿지인가요?</h2>
+            <h2 class="text-3xl font-bold text-center text-coffee-900 dark:text-white mb-12 transition-colors">왜 카페브릿지인가요?</h2>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-coffee-50 p-8 rounded-2xl text-center">
-                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                        <i data-lucide="map-pin" class="w-8 h-8 text-coffee-600"></i>
+                <div class="bg-coffee-50 dark:bg-gray-700 p-8 rounded-2xl text-center transition-colors">
+                    <div class="bg-white dark:bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm transition-colors">
+                        <i data-lucide="map-pin" class="w-8 h-8 text-coffee-600 dark:text-coffee-400"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">가까운 공간</h3>
-                    <p class="text-gray-600">어디서든 도보 10분 거리의 프라이빗한 모임 공간을 찾아보세요.</p>
+                    <h3 class="text-xl font-bold mb-3 dark:text-white">가까운 공간</h3>
+                    <p class="text-gray-600 dark:text-gray-300">어디서든 도보 10분 거리의 프라이빗한 모임 공간을 찾아보세요.</p>
                 </div>
-                <div class="bg-coffee-50 p-8 rounded-2xl text-center">
-                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                        <i data-lucide="wallet" class="w-8 h-8 text-coffee-600"></i>
+                <div class="bg-coffee-50 dark:bg-gray-700 p-8 rounded-2xl text-center transition-colors">
+                    <div class="bg-white dark:bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm transition-colors">
+                        <i data-lucide="wallet" class="w-8 h-8 text-coffee-600 dark:text-coffee-400"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">합리적인 가격</h3>
-                    <p class="text-gray-600">비싼 대관료 대신, 인원수와 시간만큼 누구나 부담 없이 예약하세요.</p>
+                    <h3 class="text-xl font-bold mb-3 dark:text-white">합리적인 가격</h3>
+                    <p class="text-gray-600 dark:text-gray-300">비싼 대관료 대신, 인원수와 시간만큼 누구나 부담 없이 예약하세요.</p>
                 </div>
-                <div class="bg-coffee-50 p-8 rounded-2xl text-center">
-                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                        <i data-lucide="coffee" class="w-8 h-8 text-coffee-600"></i>
+                <div class="bg-coffee-50 dark:bg-gray-700 p-8 rounded-2xl text-center transition-colors">
+                    <div class="bg-white dark:bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm transition-colors">
+                        <i data-lucide="coffee" class="w-8 h-8 text-coffee-600 dark:text-coffee-400"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">자유로운 음료</h3>
-                    <p class="text-gray-600">맛있는 카페 음료와 디저트를 즐기며 회의의 효율을 높여보세요.</p>
+                    <h3 class="text-xl font-bold mb-3 dark:text-white">자유로운 음료</h3>
+                    <p class="text-gray-600 dark:text-gray-300">맛있는 카페 음료와 디저트를 즐기며 회의의 효율을 높여보세요.</p>
                 </div>
             </div>
         </div>
@@ -76,15 +111,15 @@
     <section id="calculator" class="py-20">
         <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-start">
             <!-- Form -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-coffee-100">
-                <h2 class="text-2xl font-bold text-coffee-900 mb-6 flex items-center gap-2">
-                    <i data-lucide="calculator" class="w-6 h-6 text-coffee-600"></i> 예상 견적 알아보기
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-coffee-100 dark:border-gray-700 transition-colors">
+                <h2 class="text-2xl font-bold text-coffee-900 dark:text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="calculator" class="w-6 h-6 text-coffee-600 dark:text-coffee-400"></i> 예상 견적 알아보기
                 </h2>
                 
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">공간 유형</label>
-                        <select id="space" class="w-full p-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coffee-500">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">공간 유형</label>
+                        <select id="space" class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-coffee-500 transition-colors">
                             <option value="lounge" data-price="5000">오픈 카페 라운지 (1인/시간당 5,000원)</option>
                             <option value="study" data-price="8000">프라이빗 스터디룸 (1인/시간당 8,000원)</option>
                             <option value="rooftop" data-price="10000">야외 루프탑 테라스 (1인/시간당 10,000원)</option>
@@ -93,82 +128,82 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">인원 (2~20명)</label>
-                            <input type="number" id="people" min="2" max="20" value="4" class="w-full p-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coffee-500">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">인원 (2~20명)</label>
+                            <input type="number" id="people" min="2" max="20" value="4" class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-coffee-500 transition-colors">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">시간 (1~5시간)</label>
-                            <input type="number" id="hours" min="1" max="5" value="2" class="w-full p-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coffee-500">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">시간 (1~5시간)</label>
+                            <input type="number" id="hours" min="1" max="5" value="2" class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-coffee-500 transition-colors">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">이용 요일</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">이용 요일</label>
                         <div class="flex gap-4">
-                            <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border cursor-pointer peer-checked:bg-coffee-50">
-                                <input type="radio" name="day" value="weekday" checked class="text-coffee-600"> 평일
+                            <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer peer-checked:bg-coffee-50 dark:peer-checked:bg-gray-600 transition-colors">
+                                <input type="radio" name="day" value="weekday" checked class="text-coffee-600 dark:bg-gray-800"> 평일
                             </label>
-                            <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border cursor-pointer">
-                                <input type="radio" name="day" value="weekend" class="text-coffee-600"> 주말 (20% 할증)
+                            <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer transition-colors">
+                                <input type="radio" name="day" value="weekend" class="text-coffee-600 dark:bg-gray-800"> 주말 (20% 할증)
                             </label>
                         </div>
                     </div>
 
-                    <div class="pt-6 border-t border-gray-100">
+                    <div class="pt-6 border-t border-gray-100 dark:border-gray-700 transition-colors">
                         <div class="flex justify-between items-end mb-4">
-                            <span class="text-gray-600 font-medium">총 예상 금액</span>
-                            <span class="text-3xl font-bold text-coffee-600" id="totalPrice">0원</span>
+                            <span class="text-gray-600 dark:text-gray-400 font-medium">총 예상 금액</span>
+                            <span class="text-3xl font-bold text-coffee-600 dark:text-coffee-400 transition-colors" id="totalPrice">0원</span>
                         </div>
-                        <button id="inquireBtn" class="w-full bg-coffee-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-black transition">이 조건으로 문의하기</button>
+                        <button id="inquireBtn" class="w-full bg-coffee-900 dark:bg-coffee-600 hover:bg-black dark:hover:bg-coffee-500 text-white py-4 rounded-xl font-bold text-lg transition-colors">이 조건으로 문의하기</button>
                     </div>
                 </div>
             </div>
 
             <!-- Recent -->
             <div>
-                <h2 class="text-2xl font-bold text-coffee-900 mb-6 flex items-center gap-2">
-                    <i data-lucide="history" class="w-6 h-6 text-coffee-600"></i> 최근 본 견적
+                <h2 class="text-2xl font-bold text-coffee-900 dark:text-white mb-6 flex items-center gap-2 transition-colors">
+                    <i data-lucide="history" class="w-6 h-6 text-coffee-600 dark:text-coffee-400"></i> 최근 본 견적
                 </h2>
                 <div id="recentList" class="space-y-4">
                     <!-- JS will populate this -->
-                    <p class="text-gray-500 text-sm">최근 본 견적이 없습니다.</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">최근 본 견적이 없습니다.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- FAQ -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-white dark:bg-gray-800 transition-colors duration-200">
         <div class="max-w-3xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-coffee-900 mb-12">자주 묻는 질문</h2>
+            <h2 class="text-3xl font-bold text-center text-coffee-900 dark:text-white mb-12 transition-colors">자주 묻는 질문</h2>
             <div class="space-y-4" id="faqAccordion">
-                <div class="border rounded-2xl overflow-hidden">
-                    <button class="w-full flex justify-between items-center p-6 bg-coffee-50 hover:bg-coffee-100 transition" onclick="toggleFaq(this)">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden transition-colors">
+                    <button class="w-full flex justify-between items-center p-6 bg-coffee-50 dark:bg-gray-700 hover:bg-coffee-100 dark:hover:bg-gray-600 transition-colors text-gray-900 dark:text-white" onclick="toggleFaq(this)">
                         <span class="font-bold text-lg">결제는 언제 하나요?</span>
                         <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
                     </button>
-                    <div class="hidden p-6 text-gray-600 border-t">문의를 남겨주시면 담당 매니저가 조건에 맞는 카페를 매칭한 후, 카카오톡 알림톡으로 결제 링크를 보내드립니다.</div>
+                    <div class="hidden p-6 text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700 transition-colors">문의를 남겨주시면 담당 매니저가 조건에 맞는 카페를 매칭한 후, 카카오톡 알림톡으로 결제 링크를 보내드립니다.</div>
                 </div>
-                <div class="border rounded-2xl overflow-hidden">
-                    <button class="w-full flex justify-between items-center p-6 bg-coffee-50 hover:bg-coffee-100 transition" onclick="toggleFaq(this)">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden transition-colors">
+                    <button class="w-full flex justify-between items-center p-6 bg-coffee-50 dark:bg-gray-700 hover:bg-coffee-100 dark:hover:bg-gray-600 transition-colors text-gray-900 dark:text-white" onclick="toggleFaq(this)">
                         <span class="font-bold text-lg">음료는 포함된 가격인가요?</span>
                         <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
                     </button>
-                    <div class="hidden p-6 text-gray-600 border-t">공간 대여료만 포함된 가격이며, 음료는 카페 현장에서 개별적으로 주문하셔야 합니다.</div>
+                    <div class="hidden p-6 text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700 transition-colors">공간 대여료만 포함된 가격이며, 음료는 카페 현장에서 개별적으로 주문하셔야 합니다.</div>
                 </div>
-                <div class="border rounded-2xl overflow-hidden">
-                    <button class="w-full flex justify-between items-center p-6 bg-coffee-50 hover:bg-coffee-100 transition" onclick="toggleFaq(this)">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden transition-colors">
+                    <button class="w-full flex justify-between items-center p-6 bg-coffee-50 dark:bg-gray-700 hover:bg-coffee-100 dark:hover:bg-gray-600 transition-colors text-gray-900 dark:text-white" onclick="toggleFaq(this)">
                         <span class="font-bold text-lg">당일 예약도 가능한가요?</span>
                         <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
                     </button>
-                    <div class="hidden p-6 text-gray-600 border-t">네, 가능합니다! 다만 잔여 공간이 없을 수 있으므로 최소 2시간 전에 문의를 남겨주시는 것을 권장합니다.</div>
+                    <div class="hidden p-6 text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700 transition-colors">네, 가능합니다! 다만 잔여 공간이 없을 수 있으므로 최소 2시간 전에 문의를 남겨주시는 것을 권장합니다.</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-coffee-900 text-coffee-50 py-12">
+    <footer class="bg-coffee-900 dark:bg-gray-950 text-coffee-50 py-12 transition-colors duration-200">
         <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-8">
             <div>
                 <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -176,8 +211,8 @@
                 </h3>
                 <p class="text-coffee-100 mb-6 max-w-sm">동네 카페를 당신의 전용 회의실처럼. 언제 어디서나 편안한 비즈니스 미팅을 경험하세요.</p>
                 <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 rounded-full bg-coffee-600 flex items-center justify-center hover:bg-white hover:text-coffee-900 transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-coffee-600 flex items-center justify-center hover:bg-white hover:text-coffee-900 transition"><i data-lucide="mail" class="w-5 h-5"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-coffee-600 dark:bg-gray-800 flex items-center justify-center hover:bg-white dark:hover:bg-gray-700 hover:text-coffee-900 dark:hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-coffee-600 dark:bg-gray-800 flex items-center justify-center hover:bg-white dark:hover:bg-gray-700 hover:text-coffee-900 dark:hover:text-white transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
                 </div>
             </div>
             <div class="md:text-right">
@@ -194,13 +229,21 @@
     <script>
         lucide.createIcons();
 
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
         // FAQ Toggle
         function toggleFaq(btn) {
             const content = btn.nextElementSibling;
             const icon = btn.querySelector('[data-lucide]');
             const isHidden = content.classList.contains('hidden');
             
-            // Close all other FAQs (optional)
+            // Close all other FAQs
             document.querySelectorAll('#faqAccordion > div > div').forEach(div => div.classList.add('hidden'));
             document.querySelectorAll('#faqAccordion button > [data-lucide]').forEach(i => i.classList.remove('rotate-180'));
 
@@ -275,14 +318,14 @@
             if (history.length === 0) return;
 
             els.list.innerHTML = history.map(item => `
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center hover:border-coffee-500 transition cursor-default mb-3">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center hover:border-coffee-500 dark:hover:border-coffee-500 transition-colors cursor-default mb-3">
                     <div>
-                        <div class="font-bold text-coffee-900">${item.title}</div>
-                        <div class="text-sm text-gray-500 mt-1">${item.people}명 · ${item.hours}시간 · ${item.isWeekend ? '주말' : '평일'}</div>
+                        <div class="font-bold text-coffee-900 dark:text-white">${item.title}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">${item.people}명 · ${item.hours}시간 · ${item.isWeekend ? '주말' : '평일'}</div>
                     </div>
                     <div class="text-right">
-                        <div class="font-bold text-lg text-coffee-600">${item.price.toLocaleString()}원</div>
-                        <div class="text-xs text-gray-400 mt-1">${item.date}</div>
+                        <div class="font-bold text-lg text-coffee-600 dark:text-coffee-400">${item.price.toLocaleString()}원</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">${item.date}</div>
                     </div>
                 </div>
             `).join('');
